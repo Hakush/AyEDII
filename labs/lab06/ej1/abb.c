@@ -22,85 +22,20 @@ elem_less(abb_elem a, abb_elem b)
     return(a < b);
 }
 
-/*
- * @brief: Checks if all the elements of the right subtree are 
- * greater than the root of the tree. 
- *        
- * @param tree: The subtree to check.
- * @param e: The root of the tree of type abb_elem.
- * @return: True if all the elements of the right subtree are greater than
- * */
-
-static bool 
-isSubtreeRightGreater(abb tree, abb_elem e)
-{   
-    bool res = true;
-    if(tree != NULL) 
-    {
-        res = elem_less(e, tree->elem)              && 
-              isSubtreeRightGreater(tree->right, e) &&
-              isSubtreeRightGreater(tree->left, e);
-    }
-
-    return(res);
-}
- 
-/*
- * @brief: Checks if all the elements of the left subtree are 
- * less than the root of the tree. 
- *
- * @param tree: The tree to check.
- * @param e: The root of the tree. 
- * @return: True if all the elements of the left subtree are less than
- *
- * */
-
-static bool 
-isSubtreeLeftLess(abb tree, abb_elem e)
-{   
-    bool res = true;
-    if(tree != NULL) 
-    {
-        res = elem_less(tree->elem, e)         &&
-              isSubtreeLeftLess(tree->left, e) &&
-              isSubtreeLeftLess(tree->right, e);
-    }
-
-    return(res);
-}
- 
-/*
- * @brief: Checks if the tree is a valid abb.
- *         invrep is a recursive function.
- *
- * @param: tree: The tree to check.
- * @return: True if the tree is a valid abb.
- * 
- * How to do this? 
- * 
- * 1. check if the right subtree is greater than the root 
- * 2. check if the left subtree is less than the root 
- * 3. check if the right subtree is a valid abb 
- * 4. check if the left subtree is a valid abb 
- *
- * */ 
-
 static bool 
 invrep(abb tree)
 {
-    bool res = true;
-    if(tree==NULL)
-    {
-        res = true;
+    bool b = true;
+    tree = tree;
+    if(tree!=NULL) {
+        if(tree->left != NULL) {
+            b = invrep(tree->left) && tree->elem > tree->left->elem;
+        } 
+        if (tree->right != NULL) {
+            b = invrep(tree->right) && tree->elem < tree->right->elem;
+        }
     }
-    else 
-    {
-        res = isSubtreeRightGreater(tree->right, tree->elem) &&
-              isSubtreeLeftLess(tree->left, tree->elem)      &&
-              invrep(tree->right) && invrep(tree->left);
-    }
-
-    return(res);
+    return b;
 }
  
 /*
